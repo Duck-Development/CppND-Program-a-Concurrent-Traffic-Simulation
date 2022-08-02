@@ -46,6 +46,8 @@ void TrafficLight::waitForGreen()
     // FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
+    while(_massageQ.receive() != TrafficLightPhase::green);
+
 }
 
 TrafficLightPhase TrafficLight::getCurrentPhase()
@@ -89,16 +91,16 @@ void TrafficLight::cycleThroughPhases()
             if (_currentPhase == TrafficLightPhase::green)
             {
                 _currentPhase = TrafficLightPhase::red;
-                std::cout << "from green to red" << std::endl;
+                //std::cout << "from green to red" << std::endl;
             } 
             else 
             {
                 _currentPhase = TrafficLightPhase::green;
-                std::cout << "from red to green" << std::endl;
+                //std::cout << "from red to green" << std::endl;
             }
             auto tmp =_currentPhase;
             _massageQ.send(std::move(tmp));
-            // emit to mq
+            // emit to mqCD ..
         }
         std::this_thread::sleep_for(1ms);
     }
